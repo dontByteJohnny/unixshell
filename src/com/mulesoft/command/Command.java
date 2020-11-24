@@ -94,9 +94,14 @@ public class Command {
 
     public void rm(String toDelete) {
         String pathOrFileToDelete = userActualUbication + "/" + toDelete;
-        PathOrFolder pathOrFolder = routes.get(pathOrFileToDelete);
+        HashMap<String, PathOrFolder> routesAux = new HashMap<>(routes);
+        routesAux.keySet().forEach(r -> {
+            if(r.contains(pathOrFileToDelete))
+                routes.remove(r);
+        });
+        /*PathOrFolder pathOrFolder = routes.get(pathOrFileToDelete);
         if(pathOrFolder != null)
-            routes.remove(pathOrFileToDelete);
+            routes.remove(pathOrFileToDelete);*/
     }
 
 }
