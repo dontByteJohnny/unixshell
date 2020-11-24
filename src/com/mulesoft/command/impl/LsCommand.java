@@ -4,16 +4,21 @@ import com.mulesoft.command.Command;
 import com.mulesoft.command.ICommand;
 
 public class LsCommand implements ICommand {
-    private String path = "/home/user/";
+    private boolean isRecursive = false;
 
     private Command lsTerminalCommand;
 
-    public LsCommand(Command newLsCommand) {
+    public LsCommand(Command newLsCommand, String recursive) {
         this.lsTerminalCommand = newLsCommand;
+        this.isRecursive = !recursive.isEmpty();
     }
 
     @Override
     public void execute() {
-        lsTerminalCommand.ls();
+        if (isRecursive)
+            lsTerminalCommand.lsRecursive();
+        else
+            lsTerminalCommand.ls();
     }
+
 }

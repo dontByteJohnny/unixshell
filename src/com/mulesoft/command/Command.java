@@ -2,10 +2,8 @@ package com.mulesoft.command;
 
 import com.mulesoft.model.PathOrFolder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 // Receiver
 public class Command {
@@ -37,12 +35,31 @@ public class Command {
     }
 
     public void mkdir(String newPath) {
-
+        routes.put(userActualUbication+"/"+newPath, newPath);
     }
 
     public void ls() {
+        int actualPositionLength = userActualUbication.split("/").length;
+        Set<String> pathsToPrint = new HashSet<>();
+        routes.entrySet().stream().forEach(route -> {
+            String path = route.getKey();
+            String[] pathSplitted = path.split("/");
+            if (path.contains(userActualUbication) && pathSplitted.length > actualPositionLength) {
+                String pathOrFileInActualUbication = pathSplitted[actualPositionLength];
+                pathsToPrint.add(pathOrFileInActualUbication);
+            }
+        });
+        pathsToPrint.forEach(path -> System.out.println(path));
+    }
+
+    public void lsRecursive() {
+        int actualPositionLength = userActualUbication.split("/").length;
         routes.entrySet().forEach(route -> {
-            route.getKey().contains(userActualUbication);
+            String path = route.getKey();
+            if (path.contains(userActualUbication) && path.split("/").length >actualPositionLength) {
+                String pathOrFileInActualUbication = path.split(routes.get(userActualUbication))[1];
+                System.out.println(pathOrFileInActualUbication);
+            }
         });
     }
 
@@ -53,16 +70,24 @@ public class Command {
     }
 
     public void cd(String upOrDown) {
+        String auxUserUbication;
         if(upOrDown.equals("..")) {
             String thisPath = routes.get(userActualUbication);
-            if(thisPath == null)
-                System.out.println("directory you are trying to access does not exist");
-            userActualUbication = userActualUbication.replace("/"+thisPath, "");
+            auxUserUbication = userActualUbication.replace("/"+thisPath, "");
+        } else {
+            auxUserUbication = userActualUbication + "/" + upOrDown;
         }
+
+        if(routes.get(auxUserUbication).isEmpty())
+            System.out.println("directory does not exists");
+        else
+            userActualUbication = auxUserUbication;
     }
 
     public void rm(String toDelete) {
-
+        String pathOrFileToDelete = userActualUbication + "/" + toDelete;
+        if(!routes.get(pathOrFileToDelete).isEmpty())
+            routes.remove(pathOrFileToDelete);
     }
 
 }

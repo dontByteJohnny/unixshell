@@ -31,7 +31,7 @@ public class Client {
 
                 terminal.executeCommand(userCommand);
             }
-        } while(!userInput.equals("exit"));
+        } while(!userInput.equals("exit") || !userInput.equals("quit"));
 
         System.out.println("SEE YOU LATER MULE!");
     }

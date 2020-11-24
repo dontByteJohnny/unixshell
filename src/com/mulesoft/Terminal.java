@@ -2,9 +2,7 @@ package com.mulesoft;
 
 import com.mulesoft.command.Command;
 import com.mulesoft.command.ICommand;
-import com.mulesoft.command.impl.CdCommand;
-import com.mulesoft.command.impl.HelpCommand;
-import com.mulesoft.command.impl.PwdCommand;
+import com.mulesoft.command.impl.*;
 
 import java.util.HashMap;
 
@@ -18,6 +16,8 @@ public class Terminal {
         keyCommandMap.put("pwd", new PwdCommand(iCommand));
         keyCommandMap.put("help", new HelpCommand(iCommand));
         keyCommandMap.put("cd", new CdCommand(iCommand, path));
+        keyCommandMap.put("ls", new LsCommand(iCommand, path));
+        keyCommandMap.put("mkdir", new MkdirCommand(iCommand, path));
     }
 
     public void executeCommand(String userInput) {
