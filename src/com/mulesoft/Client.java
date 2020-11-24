@@ -24,12 +24,16 @@ public class Client {
             userInput = scanner. nextLine();
             if (!userInput.isEmpty()) {
                 // 1st part of user input
-                String userCommand = userInput.split(" ")[0];
-                // 2nd part of user input
-                String userPathOrFile = userInput.split(" ").length > 1 ? userInput.split(" ")[1] : "";
-                Terminal terminal = new Terminal(command, userPathOrFile);
+                String[] userInputArray = userInput.split(" ");
+                if(userInputArray.length <= 2) {
+                    // 2nd part of user input
+                    String userPathOrFile = userInput.split(" ").length > 1 ? userInput.split(" ")[1] : "";
+                    Terminal terminal = new Terminal(command, userPathOrFile);
 
-                terminal.executeCommand(userCommand);
+                    terminal.executeCommand(userInputArray[0]);
+                } else {
+                    System.out.println("Invalid command");
+                }
             }
         } while(!userInput.equals("exit") || !userInput.equals("quit"));
 

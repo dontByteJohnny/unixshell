@@ -18,6 +18,8 @@ public class Terminal {
         keyCommandMap.put("cd", new CdCommand(iCommand, path));
         keyCommandMap.put("ls", new LsCommand(iCommand, path));
         keyCommandMap.put("mkdir", new MkdirCommand(iCommand, path));
+        keyCommandMap.put("touch", new TouchCommand(iCommand, path));
+        keyCommandMap.put("rm", new RmCommand(iCommand, path));
     }
 
     public void executeCommand(String userInput) {
@@ -25,9 +27,13 @@ public class Terminal {
 
         ICommand command = keyCommandMap.get(action);
         if (command == null) {
-            System.out.println("invalid command");
+            System.out.println("Unrecognized command");
         } else {
-            command.execute();
+            try {
+                command.execute();
+            } catch(Exception ex) {
+                System.out.println("Invalid command");
+            }
         }
     }
 

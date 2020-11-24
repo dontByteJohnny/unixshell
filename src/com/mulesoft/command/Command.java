@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 // Receiver
 public class Command {
     // KVM of all the possible path
-    public HashMap<String, String> routes = new HashMap<>();
+    public HashMap<String, PathOrFolder> routes = new HashMap<>();
     // List of available commands
     List<String> commands = new ArrayList<>();
     // User current location
@@ -18,8 +18,9 @@ public class Command {
         // initial user current location
         userActualUbication = "/home/user";
         // initial paths
-        routes.put("/home", "home");
-        routes.put("/home/user", "user");
+        routes.put("/home", new PathOrFolder("home", "folder"));
+        routes.put("/home/user", new PathOrFolder("user", "folder"));
+        routes.put("/home/file.txt", new PathOrFolder("file.txt", "file"));
         // initialize possible commands
         commands.add("ls");
         commands.add("pwd");
@@ -35,7 +36,11 @@ public class Command {
     }
 
     public void mkdir(String newPath) {
-        routes.put(userActualUbication+"/"+newPath, newPath);
+        routes.put(userActualUbication+"/"+newPath, new PathOrFolder(newPath, "folder"));
+    }
+
+    public void touch(String newPath) {
+        routes.put(userActualUbication+"/"+newPath, new PathOrFolder(newPath, "file"));
     }
 
     public void ls() {
@@ -57,7 +62,8 @@ public class Command {
         routes.entrySet().forEach(route -> {
             String path = route.getKey();
             if (path.contains(userActualUbication) && path.split("/").length >actualPositionLength) {
-                String pathOrFileInActualUbication = path.split(routes.get(userActualUbication))[1];
+                PathOrFolder pathOrFolder = routes.get(userActualUbication);
+                String pathOrFileInActualUbication = path.split(pathOrFolder.getName())[1];
                 System.out.println(pathOrFileInActualUbication);
             }
         });
@@ -72,21 +78,24 @@ public class Command {
     public void cd(String upOrDown) {
         String auxUserUbication;
         if(upOrDown.equals("..")) {
-            String thisPath = routes.get(userActualUbication);
-            auxUserUbication = userActualUbication.replace("/"+thisPath, "");
+            PathOrFolder thisPath = routes.get(userActualUbication);
+            auxUserUbication = userActualUbication.replace("/"+thisPath.getName(), "");
         } else {
             auxUserUbication = userActualUbication + "/" + upOrDown;
         }
-
-        if(routes.get(auxUserUbication).isEmpty())
+        PathOrFolder pathOrFolder = routes.get(auxUserUbication);
+        if(pathOrFolder == null)
             System.out.println("directory does not exists");
+        else if("file".equals(pathOrFolder.getType()))
+            System.out.println("trying to navegate into a file");
         else
             userActualUbication = auxUserUbication;
     }
 
     public void rm(String toDelete) {
         String pathOrFileToDelete = userActualUbication + "/" + toDelete;
-        if(!routes.get(pathOrFileToDelete).isEmpty())
+        PathOrFolder pathOrFolder = routes.get(pathOrFileToDelete);
+        if(pathOrFolder != null)
             routes.remove(pathOrFileToDelete);
     }
 

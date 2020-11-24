@@ -4,21 +4,23 @@ import com.mulesoft.command.Command;
 import com.mulesoft.command.ICommand;
 
 public class LsCommand implements ICommand {
-    private boolean isRecursive = false;
+    private String recursiveString = "";
 
     private Command lsTerminalCommand;
 
     public LsCommand(Command newLsCommand, String recursive) {
         this.lsTerminalCommand = newLsCommand;
-        this.isRecursive = !recursive.isEmpty();
+        this.recursiveString = recursive;
     }
 
     @Override
     public void execute() {
-        if (isRecursive)
+        if ("-r".equals(recursiveString))
             lsTerminalCommand.lsRecursive();
-        else
+        else if(recursiveString.isEmpty())
             lsTerminalCommand.ls();
+        else
+            System.out.println("Invalid command");
     }
 
 }
