@@ -22,7 +22,7 @@ public class Client {
         do {
             Scanner scanner = new Scanner(System.in);
             userInput = scanner. nextLine();
-            if (!userInput.isEmpty()) {
+            if (!userInput.isEmpty() && !"quit".equals(userInput)) {
                 // 1st part of user input
                 String[] userInputArray = userInput.split(" ");
                 if(userInputArray.length <= 2) {
@@ -35,7 +35,7 @@ public class Client {
                     System.out.println("Invalid command");
                 }
             }
-        } while(!userInput.equals("exit") || !userInput.equals("quit"));
+        } while(!"quit".equals(userInput));
 
         System.out.println("SEE YOU LATER MULE!");
     }

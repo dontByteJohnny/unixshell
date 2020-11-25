@@ -22,13 +22,14 @@ public class Command {
         routes.put("/home/user", new PathOrFolder("user", "folder"));
         routes.put("/home/file.txt", new PathOrFolder("file.txt", "file"));
         // initialize possible commands
-        commands.add("ls");
+        commands.add("ls [] or [-r]");
         commands.add("pwd");
-        commands.add("mkdir");
-        commands.add("cd");
-        commands.add("rm");
+        commands.add("mkdir [folderName]");
+        commands.add("cd [path] or");
+        commands.add("rm [folderName]");
         commands.add("help");
-        commands.add("exit");
+        commands.add("quit");
+        commands.add("touch [fileName]");
     }
 
     public void pwd(){
